@@ -1,0 +1,33 @@
+server:
+  port: 9005
+  tomcat:
+    threads:
+      max: 10
+
+management:
+  health:
+    elasticsearch:
+        enabled: false
+  endpoints:
+    web.exposure:
+      include: "*"
+
+fhir:
+  server:
+    name: Mobile access to Health Documents
+    baseUrl: http://lb-fhir-facade-926707562.eu-west-2.elb.amazonaws.com/FHIR/R4
+    version: 1.0.1
+
+###Remote terminology validation:
+
+##Example without auth:
+#terminology:
+#  url: https://r4.ontoserver.csiro.au/fhir
+
+##Example with auth:
+#terminology:
+#  url: https://ontology.nhs.uk/authoring/fhir/
+#  authorization:
+#    tokenUrl: https://ontology.nhs.uk/authorisation/auth/realms/nhs-digital-terminology/protocol/openid-connect/token
+#    clientId: test
+#    clientSecret: test
