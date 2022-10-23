@@ -49,6 +49,9 @@
       "fullUrl": "urn:uuid:70c35c4a-65f4-4a03-bcf7-d1041ab999fd",
       "resource": {
         "resourceType": "DocumentReference",
+        "identifier": [{
+          "value": "70c35c4a-65f4-4a03-bcf7-d1041ab999fd"
+        }],
         "meta": {
           "lastUpdated": "2016-03-08T15:26:01+01:00"
         },

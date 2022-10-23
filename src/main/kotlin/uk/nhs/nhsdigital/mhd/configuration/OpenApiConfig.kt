@@ -25,9 +25,10 @@ import uk.nhs.nhsdigital.mhd.util.FHIRExamples
 
 @Configuration
 open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
-    var MHD = "Mobile access to Health Documents"
+    var MHD = "Health Documents - "
+    var DSUB = "HL7 FHIR Event - Document Notification"
     var ITI65 = "Provide Document Bundle"
-    var ITI67 = "Find Document References"
+    var ITI67 = "Find Documents"
     var ITI68 = "Retrieve Document"
 
     @Bean
@@ -42,10 +43,13 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                     .title(fhirServerProperties.server.name)
                     .version(fhirServerProperties.server.version)
                     .description(
-                        fhirServerProperties.server.name
-                                + "\n "
-                                + "\n [UK Core Implementation Guide (0.5.1)](https://simplifier.net/guide/ukcoreimplementationguide0.5.0-stu1/home?version=current)"
+                        "\n\n To **obtain Patient id** see Patient Demographics Query section of [Query for Existing Patient Data](http://lb-fhir-facade-926707562.eu-west-2.elb.amazonaws.com/)"
+                                + "\n\n See [Events and Notifications](http://lb-hl7-tie-1794188809.eu-west-2.elb.amazonaws.com/) for FHIR Subscription interactions"
+
+                                + "\n\n [UK Core Implementation Guide (0.5.1)](https://simplifier.net/guide/ukcoreimplementationguide0.5.0-stu1/home?version=current)"
                                 + "\n\n [NHS Digital Implementation Guide (2.6.0)](https://simplifier.net/guide/nhsdigital?version=2.6.0)"
+
+
                     )
                     .termsOfService("http://swagger.io/terms/")
                     .license(License().name("Apache 2.0").url("http://springdoc.org"))
@@ -74,13 +78,26 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                 .description("[HL7 FHIR Foundation Module](https://hl7.org/fhir/foundation-module.html) \n"
                         + " [IHE MHD ITI-68](https://profiles.ihe.net/ITI/MHD/ITI-68.html)")
         )
-        var examples = LinkedHashMap<String,Example?>()
+        oas.addTagsItem(
+            io.swagger.v3.oas.models.tags.Tag()
+                .name(MHD + " " + ITI65)
+                .description("[HL7 FHIR Foundation Module](https://hl7.org/fhir/foundation-module.html) \n"
+                        + " [IHE MHD ITI-65](https://profiles.ihe.net/ITI/MHD/ITI-65.html)")
+        )
+        oas.addTagsItem(
+            io.swagger.v3.oas.models.tags.Tag()
+                .name(DSUB)
+                .description("[HL7 FHIR Foundation Module](https://hl7.org/fhir/foundation-module.html) \n"
+                        + " [IHE DSUB](https://profiles.ihe.net/ITI/TF/Volume1/ch-26.html)")
+        )
+
+        val examples = LinkedHashMap<String,Example?>()
 
         examples.put("Provide Document Bundle Message",
             Example().value(FHIRExamples().loadExample("document-message.json",ctx))
         )
 
-        var messageItem = PathItem()
+        val messageItem = PathItem()
             .post(
                 Operation()
                     .addTagsItem(MHD + " " + ITI65)
@@ -103,12 +120,12 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
 
         oas.path("/FHIR/R4/\$process-message",messageItem)
 
-        var examples2 = LinkedHashMap<String,Example?>()
+        val examples2 = LinkedHashMap<String,Example?>()
 
         examples2.put("Provide Document Bundle with Comprehensive metadata of one document",
             Example().value(FHIRExamples().loadExample("MHD-transaction.json",ctx))
         )
-        var transactionItem = PathItem()
+        val transactionItem = PathItem()
             .post(
                 Operation()
                     .addTagsItem(MHD + " " + ITI65)
@@ -128,7 +145,7 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
 
         // Binary
 
-        var binaryItem = PathItem()
+        val binaryItem = PathItem()
             .get(
                 Operation()
                     .addTagsItem(MHD + " " + ITI68)
@@ -162,7 +179,11 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                         .schema(StringSchema())
                     )
             )
+        val examplesDSUB = LinkedHashMap<String,Example?>()
 
+        examplesDSUB.put("Document Notification",
+            Example().value(FHIRExamples().loadExample("documentReference-DSUB.json",ctx))
+        )
         oas.path("/FHIR/R4/DocumentReference/{id}",documentReferenceItem)
         documentReferenceItem = PathItem()
             .get(
@@ -191,6 +212,18 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
 
 
             )
+            .post(
+                Operation()
+                    .addTagsItem(DSUB)
+                    .summary("Document Notification")
+                    .description("See [Events and Notifications](http://lb-hl7-tie-1794188809.eu-west-2.elb.amazonaws.com/) for FHIR Subscription interactions")
+                    .responses(getApiResponses())
+                    .requestBody(RequestBody().content(Content()
+                        .addMediaType("application/fhir+json",
+                            MediaType()
+                                .examples(examplesDSUB)
+                                .schema(StringSchema()))
+                    )))
         oas.path("/FHIR/R4/DocumentReference",documentReferenceItem)
         
 

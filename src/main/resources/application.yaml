@@ -14,9 +14,9 @@ management:
 
 fhir:
   server:
-    name: Mobile access to Health Documents
+    name: Access to Health Documents
     baseUrl: http://lb-fhir-facade-926707562.eu-west-2.elb.amazonaws.com/FHIR/R4
-    version: 1.0.1
+    version: 1.0.2
 
 ###Remote terminology validation:
 

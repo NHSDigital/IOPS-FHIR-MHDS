@@ -1,24 +1,31 @@
 package uk.nhs.nhsdigital.mhd.provider
 
-import ca.uhn.fhir.rest.annotation.IdParam
-import ca.uhn.fhir.rest.annotation.OptionalParam
-import ca.uhn.fhir.rest.annotation.Read
-import ca.uhn.fhir.rest.annotation.Search
+import ca.uhn.fhir.rest.annotation.*
+import ca.uhn.fhir.rest.api.MethodOutcome
 import ca.uhn.fhir.rest.param.DateRangeParam
 import ca.uhn.fhir.rest.param.StringParam
 import ca.uhn.fhir.rest.param.TokenParam
 import ca.uhn.fhir.rest.server.IResourceProvider
 import org.hl7.fhir.r4.model.*
 import org.springframework.stereotype.Component
+import uk.nhs.nhsdigital.mhd.awsProvider.AWSDocumentReference
 import uk.nhs.nhsdigital.mhd.interceptor.CognitoAuthInterceptor
 import javax.servlet.http.HttpServletRequest
 
 @Component
-class DocumentReferenceProvider(var cognitoAuthInterceptor: CognitoAuthInterceptor) : IResourceProvider {
+class DocumentReferenceProvider(var cognitoAuthInterceptor: CognitoAuthInterceptor,
+val awsDocumentReference: AWSDocumentReference) : IResourceProvider {
     override fun getResourceType(): Class<DocumentReference> {
         return DocumentReference::class.java
     }
 
+    @Create
+    fun create(theRequest: HttpServletRequest, @ResourceParam documentReference: DocumentReference): MethodOutcome? {
+
+        var method = MethodOutcome().setCreated(true)
+        method.resource = awsDocumentReference.createUpdateAWSDocumentReference(documentReference, null)
+        return method
+    }
     @Read
     fun read(httpRequest : HttpServletRequest, @IdParam internalId: IdType): DocumentReference? {
         val resource: Resource? = cognitoAuthInterceptor.readFromUrl(httpRequest.pathInfo, null)
