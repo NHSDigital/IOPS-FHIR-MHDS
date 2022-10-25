@@ -96,8 +96,11 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
 
         val examples = LinkedHashMap<String,Example?>()
 
-        examples.put("Provide Document Bundle Message",
+        examples.put("Provide Document Bundle Message (PDF)",
             Example().value(FHIRExamples().loadExample("document-message.json",ctx))
+        )
+        examples.put("Provide Document Bundle Message (FHIR Document STU3)",
+            Example().value(FHIRExamples().loadExample("document-message-TOC.json",ctx))
         )
 
         val messageItem = PathItem()
@@ -184,8 +187,11 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
             )
         val examplesDSUB = LinkedHashMap<String,Example?>()
 
-        examplesDSUB.put("Document Notification",
+        examplesDSUB.put("Document Notification (PDF)",
             Example().value(FHIRExamples().loadExample("documentReference-DSUB.json",ctx))
+        )
+        examplesDSUB.put("Document Notification (FHIR Document STU3)",
+            Example().value(FHIRExamples().loadExample("documentReference-TOC-Notification.json",ctx))
         )
         oas.path("/FHIR/R4/DocumentReference/{id}",documentReferenceItem)
         documentReferenceItem = PathItem()
