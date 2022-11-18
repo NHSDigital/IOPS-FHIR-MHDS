@@ -16,7 +16,7 @@ fhir:
   server:
     name: Document Sharing
     baseUrl: https://3cdzg7kbj4.execute-api.eu-west-2.amazonaws.com/poc/documentsharing
-    version: 1.0.6
+    version: 1.0.7
 
 ###Remote terminology validation:
 
