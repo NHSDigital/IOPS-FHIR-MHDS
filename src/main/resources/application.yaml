@@ -14,9 +14,9 @@ management:
 
 fhir:
   server:
-    name: Access to Health Documents
-    baseUrl: http://lb-fhir-facade-926707562.eu-west-2.elb.amazonaws.com/FHIR/R4
-    version: 1.0.4
+    name: Document Sharing
+    baseUrl: https://3cdzg7kbj4.execute-api.eu-west-2.amazonaws.com/poc/documentsharing
+    version: 1.0.5
 
 ###Remote terminology validation:
 
