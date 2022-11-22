@@ -154,12 +154,12 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
 
         // Binary
 
-        val binaryItem = PathItem()
+        var binaryItem = PathItem()
             .get(
                 Operation()
                     .addTagsItem(MHD + " " + ITI68)
                     .summary("Any url can be used for retrieval of a raw document. See [document binary](https://care-connect-documents-api.netlify.app/api_documents_binary.html)")
-                    .responses(getApiResponses())
+                    .responses(getApiResponsesBinary())
                     .addParametersItem(Parameter()
                         .name("id")
                         .`in`("path")
@@ -167,10 +167,37 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                         .style(Parameter.StyleEnum.SIMPLE)
                         .description("The ID of the resource")
                         .schema(StringSchema())
+                        .example("3074093f-183b-47d1-a16c-ea5c101b5451")
+                    )
+            )
+        oas.path("/FHIR/R4/Binary/{id}",binaryItem)
+
+        binaryItem = PathItem()
+            .post(
+                Operation()
+                    .addTagsItem(MHD + " Upload Document")
+                    .summary("This is a raw http POST. POST of a FHIR Binary can be used, with application/fhir+json Content-Type header")
+                    .responses(getApiResponses())
+                    .addParametersItem(Parameter()
+                        .name("Content-Type")
+                        .`in`("header")
+                        .required(true)
+                        .style(Parameter.StyleEnum.SIMPLE)
+                        .description("Mime type of the document/image")
+                        .schema(StringSchema())
+                    )
+                    .addParametersItem(Parameter()
+                        .name("Accept")
+                        .`in`("header")
+                        .required(false)
+                        .style(Parameter.StyleEnum.SIMPLE)
+                        .description("Response format")
+                        .schema(StringSchema())
+                        .example("application/fhir+json")
                     )
             )
 
-        oas.path("/FHIR/R4/Binary/{id}",binaryItem)
+        oas.path("/FHIR/R4/Binary",binaryItem)
    
         // DocumentReference
         var documentReferenceItem = PathItem()
@@ -307,5 +334,19 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                         .schema(StringSchema().format("token"))
                         .example(example)))
         return pathItem
+    }
+
+    fun getApiResponsesBinary() : ApiResponses {
+
+        val response200 = ApiResponse()
+        response200.description = "OK"
+        val exampleList = mutableListOf<Example>()
+        exampleList.add(Example().value("{}"))
+        response200.content = Content()
+            .addMediaType("*/*", MediaType().schema(StringSchema()._default("{}")))
+            .addMediaType("application/fhir+json", MediaType().schema(StringSchema()._default("{}")))
+            .addMediaType("application/fhir+xml", MediaType().schema(StringSchema()._default("<>")))
+        val apiResponses = ApiResponses().addApiResponse("200",response200)
+        return apiResponses
     }
 }

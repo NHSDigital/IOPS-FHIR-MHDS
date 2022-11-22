@@ -7,16 +7,19 @@ import ca.uhn.fhir.rest.annotation.TransactionParam
 import org.hl7.fhir.instance.model.api.IBaseResource
 import org.hl7.fhir.r4.model.*
 import org.springframework.stereotype.Component
+import uk.nhs.nhsdigital.mhd.awsProvider.AWSBinary
 import uk.nhs.nhsdigital.mhd.awsProvider.AWSBundle
 import uk.nhs.nhsdigital.mhd.awsProvider.AWSDocumentReference
 import uk.nhs.nhsdigital.mhd.awsProvider.AWSPatient
+import uk.nhs.nhsdigital.mhd.configuration.FHIRServerProperties
 
 
 @Component
 class ProcessMessageProvider(
-    val awsPatient: AWSPatient,
+    val fhirServerProperties: FHIRServerProperties,
     val awsDocumentReference: AWSDocumentReference,
-    val awsBundle: AWSBundle
+    val awsBundle: AWSBundle,
+    val awsBinary: AWSBinary
 ) {
 
     @Operation(name = "\$process-message", idempotent = true)
@@ -72,6 +75,21 @@ class ProcessMessageProvider(
                 when (focusType) {
 
                     "DocumentReference" -> {
+                        val document = workerResource as DocumentReference
+                        if (document.hasContent()) {
+                            for(content in document.content) {
+                                if (content.hasAttachment()) {
+                                    val attachment = content.attachment
+                                    if (attachment.hasUrl()) {
+                                        val entry = awsBundle.findResource(bundle, "Binary", attachment.url)
+                                        if (entry != null && entry is Binary) {
+                                            val outcome = awsBinary.create(entry)
+                                            if (outcome != null && outcome.resource != null && outcome.resource is Binary)  content.attachment.url = fhirServerProperties.server.baseUrl + "/Binary/" + (outcome.resource as Binary).id
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         val documentReference = awsDocumentReference.createUpdateAWSDocumentReference(workerResource as DocumentReference,bundle)
                         if (documentReference != null) {
                             bundle.entry.add(Bundle.BundleEntryComponent().setResource(documentReference))
@@ -96,6 +114,21 @@ class ProcessMessageProvider(
                 if (entry.hasResource()) {
                     val workerResource = entry.resource
                     if (workerResource is DocumentReference) {
+                        val document = workerResource as DocumentReference
+                        if (document.hasContent()) {
+                            for(content in document.content) {
+                                if (content.hasAttachment()) {
+                                    val attachment = content.attachment
+                                    if (attachment.hasUrl()) {
+                                        val entry = awsBundle.findResource(bundle, "Binary", attachment.url)
+                                        if (entry != null && entry is Binary) {
+                                            val outcome = awsBinary.create(entry)
+                                            if (outcome != null && outcome.resource != null && outcome.resource is Binary)  content.attachment.url = fhirServerProperties.server.baseUrl + "/Binary/" +(outcome.resource as Binary).id
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         val documentReference = awsDocumentReference.createUpdateAWSDocumentReference(
                             workerResource as DocumentReference, bundle)
                         if (documentReference != null) {
