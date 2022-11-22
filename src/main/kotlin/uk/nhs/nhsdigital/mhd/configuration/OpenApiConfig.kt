@@ -171,7 +171,8 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                     )
             )
         oas.path("/FHIR/R4/Binary/{id}",binaryItem)
-
+        val binExampl = LinkedHashMap<String,Example?>()
+        binExampl.put("Hello World",Example().value("Hello World"))
         binaryItem = PathItem()
             .post(
                 Operation()
@@ -186,15 +187,13 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                         .description("Mime type of the document/image")
                         .schema(StringSchema())
                     )
-                    .addParametersItem(Parameter()
-                        .name("Accept")
-                        .`in`("header")
-                        .required(false)
-                        .style(Parameter.StyleEnum.SIMPLE)
-                        .description("Response format")
-                        .schema(StringSchema())
-                        .example("application/fhir+json")
-                    )
+                    .requestBody(
+                        RequestBody().content(Content()
+                            .addMediaType("text/plain",
+                                MediaType()
+                                    .examples(binExampl)
+                                    .schema(StringSchema()))
+                        ))
             )
 
         oas.path("/FHIR/R4/Binary",binaryItem)
@@ -213,6 +212,7 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                         .style(Parameter.StyleEnum.SIMPLE)
                         .description("The ID of the resource")
                         .schema(StringSchema())
+                        .example("f3dda825-89de-4022-ac8a-f211976630b6")
                     )
             )
         val examplesDSUB = LinkedHashMap<String,Example?>()
