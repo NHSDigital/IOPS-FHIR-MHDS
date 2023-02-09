@@ -8,16 +8,16 @@
         <version>2.7.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>uk.nhs.nhsdigital</groupId>
+    <groupId>uk.nhs.england</groupId>
     <artifactId>iops-fhir-mhd</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <name>iops-fhir-mhd</name>
     <description>IOPS FHIR MHD</description>
 
     <properties>
         <java.version>1.8</java.version>
         <kotlin.version>1.5.10</kotlin.version>
-        <fhir.version>6.2.0</fhir.version>
+        <fhir.version>6.2.5</fhir.version>
         <swagger_version>2.1.12</swagger_version>
         <parser_version>2.0.30</parser_version>
     </properties>

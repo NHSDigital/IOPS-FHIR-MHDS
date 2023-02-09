@@ -119,15 +119,15 @@
             "id" : "aaaaaaaa-bbbb-cccc-dddd-e00333300004",
             "identifier" : [
               {
-                "system" : "http://example.org/patients",
-                "value" : "mrn-1234"
+                "system": "https://fhir.nhs.uk/Id/nhs-number",
+                "value": "9876543210"
               }
             ],
             "name" : [
               {
-                "family" : "Schmidt",
+                "family" : "Kanfeld",
                 "given" : [
-                  "Dee"
+                  "Rachel"
                 ]
               }
             ]
@@ -163,7 +163,7 @@
           }
         ],
         "subject" : {
-          "reference" : "Patient/ex-patient"
+          "reference" : "#aaaaaaaa-bbbb-cccc-dddd-e00333300004"
         },
         "date" : "2020-02-01T23:50:50-05:00",
         "securityLabel" : [
