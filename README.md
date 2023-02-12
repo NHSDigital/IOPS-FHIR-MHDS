@@ -1,5 +1,5 @@
 # IOPS FHIR mCSD
 
-Demonstration of FHIR Facading of a FHIR Server to give read only access.
+Scheduled for deletion
 
-[Demonstration Server](http://lb-fhir-mhd-1617422145.eu-west-2.elb.amazonaws.com/)
+Code moved to IOPS-Integration-Project
