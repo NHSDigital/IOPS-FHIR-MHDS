@@ -27,7 +27,7 @@ import uk.nhs.england.mhd.util.FHIRExamples
 @Configuration
 open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
     var MHD = ""
-    var DSUB = "Provide Document FHIR RESTful"
+    //var DSUB = "Provide Document FHIR RESTful"
     var ITI65 = "Provide Document FHIR Bundle (Message or Transaction)"
 
     @Bean
