@@ -27,8 +27,9 @@ import uk.nhs.england.mhd.util.FHIRExamples
 @Configuration
 open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
     var MHD = ""
-    //var DSUB = "Provide Document FHIR RESTful"
+    var DSUB = "Provide Document FHIR RESTful"
     var ITI65 = "Provide Document FHIR Bundle (Message or Transaction)"
+    var APIM = "Security and API Management"
 
     @Bean
     open fun customOpenAPI(
@@ -176,9 +177,15 @@ open class OpenApiConfig(@Qualifier("R4") val ctx : FhirContext) {
                                 .schema(StringSchema()))
                     )))
         oas.path("/FHIR/R4/DocumentReference",documentReferenceItem)
-        
 
-      
+
+        oas.path("/FHIR/R4/metadata",PathItem()
+            .get(
+                Operation()
+                    .addTagsItem(APIM)
+                    .summary("server-capabilities: Fetch the server FHIR CapabilityStatement").responses(getApiResponses())))
+
+
         return oas
     }
 

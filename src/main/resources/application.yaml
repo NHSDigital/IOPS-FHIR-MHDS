@@ -16,7 +16,7 @@ fhir:
   server:
     name: Health Document Repository
     baseUrl: https://6zsrlg601k.execute-api.eu-west-2.amazonaws.com
-    version: 7.6.0
+    version: 7.6.1
 
 ###Remote terminology validation:
 

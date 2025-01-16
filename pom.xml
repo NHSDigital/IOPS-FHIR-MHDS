@@ -10,7 +10,7 @@
     </parent>
     <groupId>uk.nhs.england</groupId>
     <artifactId>iops-fhir-mhd</artifactId>
-    <version>7.6.0</version>
+    <version>7.6.1</version>
     <name>iops-fhir-mhd</name>
     <description>IOPS FHIR MHD</description>
 
