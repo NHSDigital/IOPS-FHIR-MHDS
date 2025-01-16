@@ -1,11 +1,11 @@
 
-mvn clean install
+### AWS Deploy
 
-docker build -t fhir-mhd .
+Log docker into AWS
 
-docker tag fhir-mhd:latest 365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:latest
-docker tag fhir-mhd:latest 365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:1.0.9
+`aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 365027538941.dkr.ecr.eu-west-2.amazonaws.com`
 
-docker push 365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:latest
+Then build and publish image to AWS ECR
 
-docker push 365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:1.0.9
+`mvn clean install -P dockerBuild,awsRelease`
+

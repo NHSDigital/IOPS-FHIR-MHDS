@@ -16,7 +16,7 @@
               class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <Pattern>
-                %-5level %C{1.}: %msg%n
+                %-5level %C{1}: %msg%n
             </Pattern>
         </layout>
     </appender>
@@ -41,7 +41,7 @@
 
     <!-- LOG everything at INFO level -->
     <root level="info">
-       <!-- <appender-ref ref="RollingFile" /> -->
+        <!-- <appender-ref ref="RollingFile" /> -->
         <appender-ref ref="Console" />
     </root>
 
@@ -50,7 +50,7 @@
         <appender-ref ref="ConsoleJSON" />
     </logger>
 
-    <logger name="CACHE" level="trace" additivity="false">
+    <logger name="CACHE" level="info" additivity="false">
         <appender-ref ref="ConsoleCACHE" />
     </logger>
 

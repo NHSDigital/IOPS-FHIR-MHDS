@@ -129,10 +129,6 @@ class MessageProperties {
         } else value.toInt()
     }
 
-    private fun <T : Enum<*>?> getPropertyEnum(thePropertyName: String, theEnumType: Class<T>, theDefaultValue: T): T {
-        val value = getProperty(thePropertyName, theDefaultValue!!.name)
-        return java.lang.Enum.valueOf(theEnumType, value) as T
-    }
 
 
     fun getEmailEnabled(): Boolean? {
@@ -158,10 +154,10 @@ class MessageProperties {
 
     private fun loadProperties(): Properties? {
         // Load the configurable properties file
-        var properties: Properties
+        var properties: Properties = Properties()
         try {
             MessageProperties::class.java.classLoader.getResourceAsStream(HAPI_PROPERTIES).use { `in` ->
-                properties = Properties()
+
                 properties.load(`in`)
             }
         } catch (e: Exception) {

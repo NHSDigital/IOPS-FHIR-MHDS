@@ -5,24 +5,43 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.4</version>
+        <version>3.2.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>uk.nhs.england</groupId>
     <artifactId>iops-fhir-mhd</artifactId>
-    <version>1.0.9</version>
+    <version>7.6.0</version>
     <name>iops-fhir-mhd</name>
     <description>IOPS FHIR MHD</description>
 
     <properties>
-        <java.version>1.8</java.version>
-        <kotlin.version>1.5.10</kotlin.version>
-        <fhir.version>6.2.5</fhir.version>
-        <swagger_version>2.1.12</swagger_version>
-        <parser_version>2.0.30</parser_version>
+        <java.version>20</java.version>
+        <kotlin.version>1.9.22</kotlin.version>
+        <fhir.version>7.6.0</fhir.version>
+        <swagger_version>2.2.25</swagger_version>
+        <parser_version>2.1.20</parser_version>
+        <jackson_databind_version>2.16.1</jackson_databind_version>
+        <jaxb_api_version>2.3.1</jaxb_api_version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-test-junit5</artifactId>
+            <version>1.8.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -36,6 +55,11 @@
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
         </dependency>
@@ -47,7 +71,6 @@
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -88,11 +111,7 @@
             <version>${fhir.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>ca.uhn.hapi.fhir</groupId>
-            <artifactId>hapi-fhir-validation</artifactId>
-            <version>${fhir.version}</version>
-        </dependency>
+
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-validation-resources-r4</artifactId>
@@ -102,7 +121,6 @@
 
         <!-- AWS -->
 
-        <!-- https://mvnrepository.com/artifact/com.amazonaws/aws-java-sdk-cognitoidp -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-cognitoidp</artifactId>
@@ -115,12 +133,88 @@
             <version>1.12.252</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.amazonaws.serverless/aws-serverless-java-container-spring -->
+        <!-- jakarta -->
         <dependency>
-            <groupId>com.amazonaws.serverless</groupId>
-            <artifactId>aws-serverless-java-container-springboot2</artifactId>
-            <version>1.8.2</version>
+            <groupId>jakarta.activation</groupId>
+            <artifactId>jakarta.activation-api</artifactId>
+            <version>2.1.2</version>
         </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ejb</groupId>
+            <artifactId>jakarta.ejb-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.interceptor</groupId>
+            <artifactId>jakarta.interceptor-api</artifactId>
+            <version>2.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.transaction</groupId>
+            <artifactId>jakarta.transaction-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.websocket</groupId>
+            <artifactId>jakarta.websocket-client-api</artifactId>
+            <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api-->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+            <version>${jaxb_api_version}</version>
+        </dependency>
+
+
+
+        <!-- Runtime, com.sun.xml.bind module -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.saxon</groupId>
+            <artifactId>Saxon-HE</artifactId>
+            <!-- <version>9.8.0-3</version> -->
+            <version>9.5.1-5</version>
+        </dependency>
+
 
 
         <dependency>
@@ -134,18 +228,30 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson_databind_version}</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations -->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-models</artifactId>
+            <artifactId>swagger-models-jakarta</artifactId>
             <version>${swagger_version}</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
-            <artifactId>swagger-core</artifactId>
+            <artifactId>swagger-core-jakarta</artifactId>
             <version>${swagger_version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta -->
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
+            <version>${swagger_version}</version>
+        </dependency>
+
 
         <!-- https://mvnrepository.com/artifact/io.swagger.parser.v3/swagger-parser -->
         <dependency>
@@ -156,10 +262,9 @@
 
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.4</version>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.3.0</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
@@ -167,6 +272,12 @@
             <version>2.5.5</version>
         </dependency>
 
+        <!-- https://medium.com/@phasslr/access-microsoft-excel-from-java-the-low-budget-way-6b57eece4204 -->
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+            <version>5.13.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -196,16 +307,142 @@
                         <version>${kotlin.version}</version>
                     </dependency>
                 </dependencies>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <sourceDirs>
+                                <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+                                <sourceDir>${project.basedir}/src/main/java</sourceDir>
+                            </sourceDirs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>9</source>
-                    <target>9</target>
+                    <release>${java.version}</release>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>dockerBuild</id>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-resources</id>
+                                <phase>validate</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${basedir}/target</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>src/main/docker</directory>
+                                            <filtering>true</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>prepare-package</id>
+                                <phase>package</phase>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <target>
+                                        <exec executable="docker">
+                                            <arg value="build"/>
+                                            <arg value="-t"/>
+                                            <arg value="fhir-mhd:${project.version}"/>
+                                            <arg value="."/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <!-- docker Image push and release profile -->
+
+        <profile>
+            <id>awsRelease</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <inherited>false</inherited>
+                                <configuration>
+                                    <target>
+                                        <exec executable="docker">
+                                            <arg value="tag"/>
+                                            <arg value="fhir-mhd:${project.version}"/>
+                                            <arg value="365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:latest"/>
+                                        </exec>
+                                        <exec executable="docker">
+                                            <arg value="tag"/>
+                                            <arg value="fhir-mhd:${project.version}"/>
+                                            <arg value="365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:${project.version}"/>
+                                        </exec>
+                                        <exec executable="docker">
+                                            <arg value="push"/>
+                                            <arg value="365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:latest"/>
+                                        </exec>
+                                        <exec executable="docker">
+                                            <arg value="push"/>
+                                            <arg value="365027538941.dkr.ecr.eu-west-2.amazonaws.com/fhir-mhd:${project.version}"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
